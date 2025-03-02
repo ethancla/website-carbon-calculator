@@ -23,13 +23,21 @@
 
     <div class="calculator">
         <h2>Check if your website is green</h2>
-        <input type="text" id="url" placeholder="Website Url here"> <br>
-        <button id="checker">Check</button>
-
+        <!-- Form captures URL the user inputs -->
+        <form id="siteForm">
+            <input type="text" id="url" placeholder="Website Url here"> <br>
+            <button type="submit" id="checker">Check</button>
+        </form>
+        <!-- div inserts resulting HTML after fetching data from the API -->
+        <div id="dataContainer"></div>
     </div>
 
+    <!-- <a href="" alt="URL" id="websiteURL"></a>
+
+    <script src="script.js"></script> -->
+
+    <!-- Load javascript file -->
     <script src="script.js"></script>
-    <div id="dataContainer">
 
     </div>
 
@@ -37,6 +45,5 @@
     <footer>
 
     </footer>
-    <script src="script.js"></script>
 </body>
 </html>
