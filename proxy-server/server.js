@@ -1,37 +1,30 @@
-const express = require('express');
-const fetch = require('node-fetch'); // or import fetch if using ESM
+import express from 'express';
+import fetch from 'node-fetch';
+import cors from 'cors';
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
-// Proxy endpoint: Client will call /proxy?url=...
+app.use(cors());
+
+app.use(express.json());
+
 app.get('/proxy', async (req, res) => {
-  // Extract the 'url' query parameter from the client's request
-  const siteUrl = req.query.url;
-  
-  if (!siteUrl) {
-    return res.status(400).json({ error: 'Missing url parameter' });
-  }
-
-  // Construct the API endpoint URL. In this case, the website carbon API.
-  const apiUrl = `https://api.websitecarbon.com/site?url=${encodeURIComponent(siteUrl)}`;
-
-  try {
-    // Fetch data from the API server-side
-    const response = await fetch(apiUrl);
-    
-    if (!response.ok) {
-      return res.status(response.status).json({ error: 'Error fetching data from API' });
+    const { url } = req.query;
+    if (!url) {
+        return res.status(400).json({ error: 'Missing URL parameter' });
     }
 
-    const data = await response.json();
-    // Send the API response data back to the client
-    res.json(data);
-  } catch (error) {
-    console.error("Error in proxy:", error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        res.status(500).json({ error: 'Failed to fetch data' });
+    }
 });
 
 app.listen(PORT, () => {
-  console.log(`Proxy server listening on port ${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });
